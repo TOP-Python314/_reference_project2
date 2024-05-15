@@ -5,8 +5,23 @@ scale 1.2
 
 interface dict
 
+interface DictOfRanges {
+    <font:Brass Mono><size:12>(int, int): Any
+    --
+    __init__()
+    __getitem__()
+}
+
 class Kind {
-    +name: <i>str</i>
+    <font:Brass Mono><size:12>(int, int): MatureStage
+    --
+    +file_name: <i>str</i>
+    +str_name: <i>str</i>
+}
+
+class MatureStage {
+    +days: <i>int</i>
+    +params: <i>dict</i> [Type[Parameter], Parameter]
 }
 
 class Creature {
@@ -24,12 +39,12 @@ class Creature {
 abstract Parameter {
     +{static}name: <i>str</i>
     #value: <i>float</i>
-    --<font size=12><i> getters  </i></font>--
+    --<size:12>// getters  // --
     +range → <i>tuple</i> [<i>float</i> , <i>float</i> ]
     +value → <i>float</i>
-    --<font size=12><i> setters  </i></font>--
+    --<size:12>// setters  // --
     +value()
-    --<font size=12><i> methods  </i></font>--
+    --<size:12>// methods  // --
     +{abstract}update()
 }
 
@@ -51,10 +66,16 @@ hide interface empty members
 
 left to right direction
 
-dict <|- Kind
+dict <|- DictOfRanges
+
+DictOfRanges <|- Kind
+
+Kind o- MatureStage
+
+MatureStage o-- Parameter
 
 Creature o-up- Kind
-Creature o-- Parameter
+Creature o- Parameter
 
 Parameter <|-- Health
 Parameter <|-- Satiety

@@ -3,6 +3,13 @@
 !theme monokai_npp from .styles
 scale 1.2
 
+legend bottom left
+    //~# переменные аннотаций//
+    TypeCrParam = Type[CreatureParameter]
+    KParamsDict = dict[TypeCrParam, KindParameter]
+    CrParamsDict = dict[TypeCrParam, CreatureParameter]
+end legend
+
 interface dict
 
 interface DictOfRanges {
@@ -21,13 +28,23 @@ class Kind {
 
 class MatureStage {
     +days: <i>int</i>
-    +params: <i>dict</i> [Type[Parameter], Parameter]
+    +params: <font:Noto Mono><size:14>KParamsDict
+}
+
+abstract Parameter {
+    -min: <i>float</i>
+    -max: <i>float</i>
+    -delta: <i>float</i>
+}
+
+class KindParameter << dataclass >> {
+    +default: <i>float</i>
 }
 
 class Creature {
     +kind: Kind
     #age: <i>int</i>
-    +params: <i>dict</i> [Type[Parameter], Parameter]
+    +params: <font:Noto Mono><size:14>CrParamsDict
     --<size:12>// getters  // --
     +age → <i>int</i>
     --<size:12>// setters  // --
@@ -36,7 +53,7 @@ class Creature {
     -grow_up()
 }
 
-abstract Parameter {
+abstract CreatureParameter {
     +{static}name: <i>str</i>
     #value: <i>float</i>
     --<size:12>// getters  // --
@@ -72,13 +89,16 @@ DictOfRanges <|- Kind
 
 Kind o- MatureStage
 
-MatureStage o-- Parameter
+Parameter <|- KindParameter
+Parameter <|-- CreatureParameter
+
+MatureStage o-- KindParameter
 
 Creature o-up- Kind
-Creature o- Parameter
+Creature o-- CreatureParameter
 
-Parameter <|-- Health
-Parameter <|-- Satiety
-Parameter <|-- Emotion
+CreatureParameter <|-- Health
+CreatureParameter <|-- Satiety
+CreatureParameter <|-- Emotion
 
 @enduml

@@ -39,6 +39,7 @@ abstract Parameter {
 }
 
 class KindParameter << dataclass >> {
+    +cls: <font:Noto Mono><size:14>TypeCrParam
     +default: <i>float</i>
 }
 

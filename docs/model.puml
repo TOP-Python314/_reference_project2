@@ -7,10 +7,11 @@ legend bottom left
     //~# переменные аннотаций//
     TypeCrParam = Type[CreatureParameter]
     KParamsDict = dict[TypeCrParam, KindParameter]
-    CrParamsDict = dict[TypeCrParam, CreatureParameter]
+    Range = tuple[float, float]
 end legend
 
-interface dict
+interface dict1 as "dict"
+interface dict2 as "dict"
 
 interface DictOfRanges {
     <font:Brass Mono><size:12>(int, int): Any
@@ -44,7 +45,7 @@ class KindParameter << dataclass >> {
 class Creature {
     +kind: Kind
     #age: <i>int</i>
-    +params: <font:Noto Mono><size:14>CrParamsDict
+    +params: Parameters
     --<size:12>// getters  // --
     +age → <i>int</i>
     --<size:12>// setters  // --
@@ -53,11 +54,19 @@ class Creature {
     -grow_up()
 }
 
+class Parameters {
+    <font:Brass Mono><size:12>TypeCrParam: CreatureParameter
+    --
+    __setitem__()
+    +update()
+}
+
 abstract CreatureParameter {
     +{static}name: <i>str</i>
+    -params: Parameters
     #value: <i>float</i>
     --<size:12>// getters  // --
-    +range → <i>tuple</i> [<i>float</i> , <i>float</i> ]
+    +range → <font:Noto Mono><size:14>Range
     +value → <i>float</i>
     --<size:12>// setters  // --
     +value()
@@ -83,7 +92,8 @@ hide interface empty members
 
 left to right direction
 
-dict <|- DictOfRanges
+dict1 <|- DictOfRanges
+dict2 <|- Parameters
 
 DictOfRanges <|- Kind
 
@@ -95,7 +105,9 @@ Parameter <|-- CreatureParameter
 MatureStage o-- KindParameter
 
 Creature o-up- Kind
-Creature o-- CreatureParameter
+Creature o-- Parameters
+
+Parameters o-o CreatureParameter
 
 CreatureParameter <|-- Health
 CreatureParameter <|-- Satiety

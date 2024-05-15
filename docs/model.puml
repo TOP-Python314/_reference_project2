@@ -1,0 +1,63 @@
+@startuml
+
+!theme monokai_npp from .styles
+scale 1.2
+
+interface dict
+
+class Kind {
+    +name: <i>str</i>
+}
+
+class Creature {
+    +kind: Kind
+    #age: <i>int</i>
+    +params: <i>dict</i> [Type[Parameter], Parameter]
+    --<size:12>// getters  // --
+    +age → <i>int</i>
+    --<size:12>// setters  // --
+    +age()
+    --<size:12>// methods  // --
+    -grow_up()
+}
+
+abstract Parameter {
+    +{static}name: <i>str</i>
+    #value: <i>float</i>
+    --<font size=12><i> getters  </i></font>--
+    +range → <i>tuple</i> [<i>float</i> , <i>float</i> ]
+    +value → <i>float</i>
+    --<font size=12><i> setters  </i></font>--
+    +value()
+    --<font size=12><i> methods  </i></font>--
+    +{abstract}update()
+}
+
+class Health {
+    +update()
+}
+
+class Satiety {
+    +update()
+}
+
+class Emotion {
+    +update()
+}
+
+hide abstract empty members
+hide class empty members
+hide interface empty members
+
+left to right direction
+
+dict <|- Kind
+
+Creature o-up- Kind
+Creature o-- Parameter
+
+Parameter <|-- Health
+Parameter <|-- Satiety
+Parameter <|-- Emotion
+
+@enduml

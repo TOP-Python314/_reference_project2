@@ -1,0 +1,34 @@
+@startuml
+
+!theme monokai_npp from .styles
+scale 1.2
+
+class Application {
+    +view: MainMenu | Game
+}
+
+class Game {
+    +pet: model.Creature
+}
+
+class MainMenu
+
+class KindLoader {
+    +get_kinds() → <i>list</i> [model.Kind]
+}
+
+class FileIO {
+    +{static}data_path: <i>Path</i>
+    +get_kind_files()
+}
+
+hide class empty members
+
+Application o-- MainMenu
+Application o-- Game
+
+MainMenu ..> KindLoader
+
+KindLoader .right.> FileIO
+
+@enduml

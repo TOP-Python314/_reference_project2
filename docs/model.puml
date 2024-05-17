@@ -1,7 +1,7 @@
 @startuml
 
 !theme monokai_npp from .styles
-scale 1.2
+scale 1.1
 
 legend bottom left
     //~# переменные аннотаций//
@@ -29,7 +29,10 @@ class Kind {
 
 class MatureStage {
     +days: <i>int</i>
+    +time_before_act: <i>int</i>
     +params: <font:Noto Mono><size:14>KParamsDict
+    +user_actions: <i>list</i> [UserAction]
+    +creature_actions: <i>list</i> [CreatureAction]
 }
 
 abstract Parameter {
@@ -47,12 +50,15 @@ class Creature {
     +kind: Kind
     #age: <i>int</i>
     +params: Parameters
+    +user_actions: <i>list</i> [UserAction]
+    -creature_actions: <i>list</i> [CreatureAction]
     --<size:12>// getters  // --
     +age → <i>int</i>
     --<size:12>// setters  // --
     +age()
     --<size:12>// methods  // --
     -grow_up()
+    +act()
 }
 
 class Parameters {
@@ -87,6 +93,38 @@ class Emotion {
     +update()
 }
 
+abstract Action {
+    -animation_timer: <i>int</i>
+    -description: <i>str</i>
+    -params: Parameters
+    +animate()
+    +{abstract}param_change()
+}
+
+abstract UserAction
+
+abstract CreatureAction {
+    -probability: <i>int</i>
+    --<size:12>// getters  // --
+    +{abstract}probability → <i>int</i>
+}
+
+class Feed {
+    +param_change()
+}
+
+class Play {
+    +param_change()
+}
+
+class ChasingTail {
+    +param_change()
+}
+
+class Sleep {
+    +param_change()
+}
+
 hide abstract empty members
 hide class empty members
 hide interface empty members
@@ -104,14 +142,26 @@ Parameter <|- KindParameter
 Parameter <|-- CreatureParameter
 
 MatureStage o-- KindParameter
+MatureStage o-- Action
 
 Creature o-up- Kind
 Creature o-- Parameters
+Creature o-left- Action
 
 Parameters o-o CreatureParameter
 
 CreatureParameter <|-- Health
 CreatureParameter <|-- Satiety
 CreatureParameter <|-- Emotion
+
+Action <|-- CreatureAction
+Action <|-- UserAction
+Action o-right- Parameters
+
+UserAction <|-- Feed
+UserAction <|-- Play
+
+CreatureAction <|-- ChasingTail
+CreatureAction <|-- Sleep
 
 @enduml

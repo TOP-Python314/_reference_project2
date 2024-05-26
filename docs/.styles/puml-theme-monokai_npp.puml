@@ -224,6 +224,8 @@ skinparam usecase {
   arrow_style()
 }
 
+' Activity diagrams
+
 skinparam activity {
   basic_style()
   font_style()
@@ -231,8 +233,9 @@ skinparam activity {
 
   StartColor $ACCENT_DARK
   EndColor $ACCENT_DARK
-  ' DiamondBackgroundColor $ACCENT_DARK
+  StopColor $ACCENT_DARK
   DiamondBorderColor $ACCENT_DARK
+  ' DiamondBackgroundColor $ACCENT_DARK
 }
 
 ' State diagrams

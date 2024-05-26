@@ -1,7 +1,7 @@
 @startuml
 
 !theme monokai_npp from .styles
-scale 1.1
+scale 1
 
 legend bottom left
     //~# переменные аннотаций//
@@ -48,6 +48,7 @@ class KindParameter << dataclass >> {
 
 class Creature {
     +kind: Kind
+    +name: <i>str</i>
     #age: <i>int</i>
     +params: Parameters
     +user_actions: <i>list</i> [UserAction]
@@ -57,7 +58,6 @@ class Creature {
     --<size:12>// setters  // --
     +age()
     --<size:12>// methods  // --
-    -grow_up()
     +act()
 }
 

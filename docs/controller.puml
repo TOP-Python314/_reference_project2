@@ -5,10 +5,16 @@ scale 1.2
 
 class Application {
     +view: MainMenu | Game
+    -is_alive() → //bool//
 }
 
 class Game {
     +pet: model.Creature
+}
+
+class CreatureLoader {
+    +get_new_creature() → model.Creature
+    +get_creature_from_file() → model.Creature
 }
 
 class MainMenu
@@ -30,5 +36,7 @@ Application o-- Game
 MainMenu ..> KindLoader
 
 KindLoader .right.> FileIO
+
+Game ..> CreatureLoader
 
 @enduml

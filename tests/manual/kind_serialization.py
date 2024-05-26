@@ -2,6 +2,9 @@ from pathlib import Path
 from pickle import dump
 from sys import path
 
+tests_dir = Path(path[0]).parent
+path.insert(1, str(tests_dir / 'prototypes'))
+
 from model import *
 
 
@@ -30,7 +33,7 @@ kinds = [
 
 if __name__ == '__main__':
     
-    test_data_dir = Path(path[0]).parent.parent / 'data'
+    test_data_dir = tests_dir / 'data'
     kinds_dir = test_data_dir / 'kinds'
     
     for kind in kinds:

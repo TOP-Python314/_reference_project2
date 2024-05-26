@@ -18,17 +18,17 @@ class RootWidget(Tk):
         self.app = app
         
         self.title('Тамагочи')
-
+        
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
         self.width = screen_width // 3
         self.height = screen_height * 3 // 4
         x = screen_width // 2 - self.width // 2
         y = screen_height // 2 - self.height // 2
-
+        
         self.geometry(f'{self.width}x{self.height}+{x}+{y}')
         self.resizable(False, False)
-
+        
         self.mainframe: Frame = None
     
     def menu_frame(self, kinds: list[model.Kind]) -> None:
@@ -127,7 +127,7 @@ class Game(Frame):
         self.rowconfigure(1, minsize=self._screen_size)
         self.rowconfigure(2, minsize=self._actions_height)
         self.columnconfigure(0, minsize=self._screen_size)
-
+        
         text_panel = Frame(self)
         text_panel.grid(
             row=0, column=0,
@@ -137,7 +137,7 @@ class Game(Frame):
         text_panel.rowconfigure(0, minsize=self._text_height)
         text_panel.columnconfigure(0, minsize=self._screen_size//7*5)
         text_panel.columnconfigure(1, minsize=self._screen_size//7*2)
-
+        
         self.message = StringVar(self, '')
         Label(
             text_panel,
@@ -152,7 +152,7 @@ class Game(Frame):
             sticky='nsew',
             ipadx=ipad, ipady=ipad,
         )
-
+        
         self.params = StringVar(self, '')
         Label(
             text_panel,
@@ -167,7 +167,7 @@ class Game(Frame):
             sticky='nsew',
             ipadx=ipad, ipady=ipad,
         )
-
+        
         self._image: PhotoImage = None
         self.screen = Label(self)
         self.screen.grid(
@@ -175,9 +175,9 @@ class Game(Frame):
             sticky='nsew',
             pady=(0, pad),
         )
-
+        
         self.create_buttons()
-
+    
     def create_buttons(self):
         buttons_panel = Frame(self)
         buttons_panel.grid(
@@ -187,7 +187,7 @@ class Game(Frame):
         buttons = 6
         self.actions: list[Button] = []
         self._buttons_images: list[PhotoImage] = []
-        paddings = ((self._screen_size - self._actions_height*6)//(buttons-1),)*(buttons-1) + (0,)
+        paddings = ((self._screen_size - self._actions_height*6)//(buttons-1),) * (buttons-1) + (0,)
         img_size = self._actions_height - 10
         for action, i in zip_longest(
                 self.master.app.creature.player_actions,
@@ -212,7 +212,7 @@ class Game(Frame):
                 # необходимо добавить параметр в lambda-функцию, чтобы каждая из создаваемых в цикле функций обращалась к соответствующему экземпляру action
                 # иначе, функции обращаются к action только во время вызова, а не в момент создания
                 # https://docs.python.org/3/faq/programming.html#why-do-lambdas-defined-in-a-loop-with-different-values-all-return-the-same-result
-                command=lambda act=action: self.change_message(f'{act}\n{act.do()}'),
+                command=lambda act=action: self.change_message(f'{act}\n{act.param_change()}'),
             )
             btn.grid(
                 row=0, column=i,
@@ -220,38 +220,39 @@ class Game(Frame):
                 padx=(0, paddings[i]),
             )
             self.actions.append(btn)
-
+    
     def change_message(self, text: str) -> None:
         self.message.set(text)
         self.update_idletasks()
-
+    
     def change_params(self, text: str) -> None:
         self.params.set(text)
         self.update_idletasks()
-
+    
     def change_image(self, img_path: str | Path) -> None:
         self._image = PhotoImage(file=img_path)
         # img_width, img_height = self._image.width(), self._image.height()
         # if img_width != self._screen_size or img_height != self._screen_size:
-            # self._image = _resize_image(
-                # self._image,
-                # img_width,
-                # img_height,
-                # self._screen_size,
-                # self._screen_size,
-            # )
+        #     self._image = _resize_image(
+        #         self._image,
+        #         img_width,
+        #         img_height,
+        #         self._screen_size,
+        #         self._screen_size,
+        #     )
         self.screen.configure(image=self._image)
         self.update_idletasks()
     
     def check_params(self):
         # if self.master.app.creature.params[...]
+        # ...
         self.change_image(controller.DATA_DIR / 'images/dog.png')
         
         self.after(250, lambda: self.check_params())
         self.update()
     
     def update_params(self):
-        self.master.app.creature.update()
+        self.master.app.creature.params.update()
         self.change_params(repr(self.master.app.creature))
         self.after(1000, lambda: self.update_params())
         self.update()
